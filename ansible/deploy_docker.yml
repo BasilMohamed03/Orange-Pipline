@@ -2,8 +2,13 @@
 - name: Deploy Docker and Application
   hosts: web
   become: yes
+  gather_facts: yes
 
   tasks:
+    - name: Disable host key checking
+      ansible.builtin.set_fact:
+        ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+
     - name: Install Docker
       apt:
         name: docker.io
@@ -23,3 +28,4 @@
       command: >
         docker run -d --name app-container
         -p 80:80 basilmohamed/python_app:orange
+
