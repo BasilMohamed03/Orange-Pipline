@@ -1,0 +1,25 @@
+---
+- name: Deploy Docker and Application
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    - name: Start Docker Service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull Docker Image
+      command: docker pull basilmohamed/python_app:orange
+
+    - name: Run Docker Container
+      command: >
+        docker run -d --name app-container
+        -p 80:80 basilmohamed/python_app:orange
