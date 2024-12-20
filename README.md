@@ -40,6 +40,8 @@ Install the following plugins in Jenkins (These tools are likely pre-installed):
 - Ansible Plugin
 
 #### b. Configure Credentials
+
+##### Jenkins Credentials
 ![Jenkins Credentials](Screenshots/Jenkins_Credentials.png)
 
 1. **GitHub Credentials:**
@@ -99,8 +101,6 @@ EXPOSE 5000
 # Command to run the application
 CMD ["python", "app.py"]
  ```
- ![File example](Screenshots/Docker_File.png)
-
 ### 4. Ansible Configuration
 
 #### a. Ansible Inventory File
@@ -109,10 +109,11 @@ Create the Ansible inventory file `inventory`:
 
 ```ini
 [web]
-192.168.117.132 ansible_user=machine1 ansible_become_password="Put_Your-machine_password"
-192.168.117.133 ansible_user=machine2 ansible_become_password="Put_Your-machine_password"
+192.168.117.132 ansible_user=machine1 ansible_become_password="Your-machine_password"
+192.168.117.133 ansible_user=machine2 ansible_become_password="Your-machine_password"
 ```
-![File example](Screenshots/Inventory.png)
+##### File Example
+ ![File Example](Screenshots/Inventory.png)
 
 #### b. Ansible Configuration File
 
@@ -156,6 +157,7 @@ Save the following Ansible playbook as `deploy_docker.yml`:
         docker run -d --name app-container
         -p 80:80 docker_username/image_name:tag
 ```
+##### File Example
 ![File example](Screenshots/Ansible_Playbook.png)
 
 ---
@@ -293,13 +295,16 @@ stage('Verify Ansible Files') {
 ---
 
 ## Screenshots
+### Jenkins General Configuration
+ ![General setting](Screenshots/Extra_Configuration.png)
 
  ### pipeline console output
  ![expected output](Screenshots/Pipeline_Console.png)
  ![expected output](Screenshots/Pipeline_Build.png)
 
- ### Jenkins General Configuration
- ![General setting](Screenshots/Extra_Configuration.png)
+ ### Ansible_execution
+ ![Ansible_execution](Screenshots/Ansible_execution.png)
+
 
  
 
