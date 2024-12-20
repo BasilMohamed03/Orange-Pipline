@@ -305,7 +305,8 @@ stage('Verify Ansible Files') {
  ### Ansible_execution
  ![Ansible_execution](Screenshots/Ansible_execution.png)
 
-
- 
-
-
+ ### Two machine images
+  #### Machine1
+   ![Machine1_image](Screenshots/Machine1.png)
+  #### Machine2
+   ![Machine2_image](Screenshots/Machine2.png)
