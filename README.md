@@ -40,19 +40,21 @@ Install the following plugins in Jenkins (These tools are likely pre-installed):
 - Ansible Plugin
 
 #### b. Configure Credentials
+![Jenkins Credentials](Screenshots/Jenkins_Credentials.png)
 
 1. **GitHub Credentials:**
 
    - Add GitHub credentials (username/password or token) in Jenkins.
 
-2. **SSH Key for Target VMs:**
-
-   - Add SSH private key in Jenkins credentials.
-
-3. **Docker Hub Credentials:**
+2. **Docker Hub Credentials:**
 
    - Add Docker Hub credentials Secret-Text (Recommended) or (username/password) in Jenkins.
 
+3. **SSH Key for Target VMs:**
+
+   - Add SSH private key in Jenkins credentials.
+
+  
 ### 2. Configure SSH Access
 
 1. Generate an SSH key for Jenkins:
@@ -74,8 +76,32 @@ Install the following plugins in Jenkins (These tools are likely pre-installed):
    sudo -u jenkins ssh machine1@192.168.117.132
    sudo -u jenkins ssh machine2@192.168.117.133
    ```
+### 3. Docker Configuration
 
-### 3. Ansible Configuration
+ #### a. Create Docker file
+``` dockerfile
+# Use the official Python image
+FROM python:3.9-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Copy requirements.txt and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the application code
+COPY . .
+
+# Expose the application port
+EXPOSE 5000
+
+# Command to run the application
+CMD ["python", "app.py"]
+ ```
+ ![File example](Screenshots/Docker_File.png)
+
+### 4. Ansible Configuration
 
 #### a. Ansible Inventory File
 
@@ -86,6 +112,7 @@ Create the Ansible inventory file `inventory`:
 192.168.117.132 ansible_user=machine1 ansible_become_password="Put_Your-machine_password"
 192.168.117.133 ansible_user=machine2 ansible_become_password="Put_Your-machine_password"
 ```
+![File example](Screenshots/Inventory.png)
 
 #### b. Ansible Configuration File
 
@@ -93,7 +120,7 @@ Create the `ansible.cfg` file in the Ansible directory:
 
 ```ini
 [defaults]
-inventory = /home/basil/Final_Task/ansible/inventory
+inventory = /home/your_username/ansible/inventory
 private_key_file = /var/lib/jenkins/.ssh/id_rsa
 host_key_checking = False
 ```
@@ -122,13 +149,14 @@ Save the following Ansible playbook as `deploy_docker.yml`:
         enabled: yes
 
     - name: Pull Docker Image
-      command: docker pull basilmohamed/python_app:orange
+      command: docker pull docker_username/image_name:tag
 
     - name: Run Docker Container
       command: >
         docker run -d --name app-container
-        -p 80:80 basilmohamed/python_app:orange
+        -p 80:80 docker_username/image_name:tag
 ```
+![File example](Screenshots/Ansible_Playbook.png)
 
 ---
 
@@ -141,7 +169,7 @@ Create the Jenkins pipeline using the following script:
     agent any
 
     environment {
-        DOCKER_IMAGE = 'basilmohamed/python_app:orange'
+        DOCKER_IMAGE = 'docker_username/image_name:tag'
         INVENTORY_FILE = 'ansible/inventory'
         PLAYBOOK_FILE = 'ansible/deploy_docker.yml'
     }
@@ -151,7 +179,7 @@ Create the Jenkins pipeline using the following script:
             steps {
                 git branch: 'main',
                     credentialsId: 'github-credentials', 
-                    url: 'https://github.com/BasilMohamed03/Orange-Pipline.git'
+                    url: 'https://github.com/your-username/repo-name.git'
             }
         }
 
@@ -263,3 +291,16 @@ stage('Verify Ansible Files') {
 - Check Jenkins logs for detailed pipeline errors.
 
 ---
+
+## Screenshots
+
+ ### pipeline console output
+ ![expected output](Screenshots/Pipeline_Console.png)
+ ![expected output](Screenshots/Pipeline_Build.png)
+
+ ### Jenkins General Configuration
+ ![General setting](Screenshots/Extra_Configuration.png)
+
+ 
+
+
