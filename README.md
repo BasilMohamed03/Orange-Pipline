@@ -112,8 +112,6 @@ Create the Ansible inventory file `inventory`:
 192.168.117.132 ansible_user=machine1 ansible_become_password="Your-machine_password"
 192.168.117.133 ansible_user=machine2 ansible_become_password="Your-machine_password"
 ```
-##### File Example
- ![File Example](Screenshots/Inventory.png)
 
 #### b. Ansible Configuration File
 
@@ -157,10 +155,6 @@ Save the following Ansible playbook as `deploy_docker.yml`:
         docker run -d --name app-container
         -p 80:80 docker_username/image_name:tag
 ```
-##### File Example
-![File example](Screenshots/Ansible_Playbook.png)
-
----
 
 ## Jenkins Pipeline
 
