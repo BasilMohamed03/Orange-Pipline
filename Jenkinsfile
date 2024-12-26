@@ -1,8 +1,8 @@
-pipeline {
+        pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'basilmohamed/python_app:orange'
+        DOCKER_IMAGE = 'docker_username/image_name:tag'
         INVENTORY_FILE = 'ansible/inventory'
         PLAYBOOK_FILE = 'ansible/deploy_docker.yml'
     }
@@ -12,7 +12,7 @@ pipeline {
             steps {
                 git branch: 'main',
                     credentialsId: 'github-credentials', 
-                    url: 'https://github.com/BasilMohamed03/Orange-Pipline.git'
+                    url: 'https://github.com/your-username/repo-name.git'
             }
         }
 
@@ -32,7 +32,8 @@ pipeline {
                 }
             }
         }
-        
+
+       //optional Stage
 stage('Debug Environment') {
     steps {
         sh 'env'
@@ -40,13 +41,13 @@ stage('Debug Environment') {
         sh 'ls -l ~/.ssh'
     }
 }
+       //optional Stage
 stage('Verify Ansible Files') {
     steps {
         sh 'ls -l ansible'
         sh 'cat ansible/ansible.cfg'
     }
 }
-
 
 
         stage('Deploy to VMs with Ansible') {
@@ -64,4 +65,4 @@ stage('Verify Ansible Files') {
             echo 'Pipeline failed. Check logs for details.'
         }
     }
-}
+        }
